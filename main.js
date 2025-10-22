@@ -531,7 +531,7 @@ function showNotification(message, type = 'info') {
 // Load products function (update existing)
 async function loadProducts() {
     try {
-        const response = await fetch('http://localhost:3000/products');
+        const response = await fetch('https://raw.githubusercontent.com/cuongdzsv40-prog/backend-json/refs/heads/main/db.json');
         if (!response.ok) throw new Error('Không thể tải dữ liệu');
         
         allProducts = await response.json();
