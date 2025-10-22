@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chi tiết sản phẩm - Laptop & Phone Store</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="icon" href="img/iphone.jpg">
+  <meta name="description" content="Chi tiết sản phẩm điện thoại và laptop chính hãng, giá tốt.">
+  <meta name="robots" content="index,follow">
+</head>
+<body>
+
+  <!-- Header sẽ được inject bởi main.js nếu chưa có -->
+
+  <main class="products-section">
+    <nav class="breadcrumb" aria-label="Breadcrumb">
+      <a href="index.html">Trang chủ</a>
+      <span aria-hidden="true">›</span>
+      <a href="product.html">Sản phẩm</a>
+      <span aria-hidden="true">›</span>
+      <span class="current" id="breadcrumb-current">Chi tiết</span>
+    </nav>
+
+    <div id="product-detail"></div>
+  </main>
+
+  <!-- Footer sẽ được inject bởi main.js nếu chưa có -->
+
+  <script src="main.js"></script>
+  <script>
+    // Đảm bảo cuộn lên đầu khi vào trang chi tiết
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  </script>
+</body>
+</html>
+
+

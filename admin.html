@@ -1,0 +1,743 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin - Quản lý sản phẩm</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Thanh điều hướng -->
+  <header class="navbar">
+    <a href="index.html" class="logo">📱 Laptop & Phone Store</a>
+    
+    <!-- Thanh tìm kiếm -->
+    <div class="search-box">
+      <input id="search-input" type="text" placeholder="Tìm sản phẩm...">
+      <button id="search-button">Tìm</button>
+    </div>
+
+    <!-- Đăng nhập / Đăng ký + Giỏ hàng -->
+    <div class="auth">
+      <a href="index.html" class="btn">Trang chủ</a>
+      <a href="admin.html" class="btn" style="background: var(--gradient-primary); color: white;">🔧 Admin</a>
+      <a href="product.html" class="btn">Sản phẩm</a>
+      <a href="../lab8/login.html" class="btn">Đăng nhập</a>
+      <a href="../lab8/register.html" class="btn">Đăng ký</a>
+      <a href="#" class="cart-btn" id="cart-button" aria-label="Giỏ hàng">
+        🛒 <span>Giỏ hàng</span>
+        <span class="cart-count" id="cart-count">0</span>
+      </a>
+    </div>
+  </header>
+
+  <!-- Tiêu đề trang -->
+  <h1 class="tc">Quản lý sản phẩm</h1>
+
+  <!-- Admin Panel -->
+  <div class="admin-panel">
+    <div class="admin-header">
+      <h2>🔧 Admin Panel</h2>
+      <p>Thêm, sửa, xóa sản phẩm</p>
+    </div>
+    
+    <div class="admin-actions">
+      <button class="btn-admin btn-add" onclick="openAddModal()">
+        ➕ Thêm sản phẩm mới
+      </button>
+      <button class="btn-admin btn-refresh" onclick="loadProducts()">
+        🔄 Làm mới danh sách
+      </button>
+    </div>
+  </div>
+
+  <!-- Khu vực sản phẩm -->
+  <div class="products-section">
+    <div class="products-grid" id="products-grid">
+      <!-- Products will be loaded here -->
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer>
+    <div class="footer-container">
+      <div class="footer-about">
+        <h3>📱 Laptop & Phone Store</h3>
+        <p>Cửa hàng chuyên cung cấp điện thoại và laptop chính hãng, giá tốt.</p>
+      </div>
+
+      <div class="footer-links">
+        <h4>Liên kết nhanh</h4>
+        <ul>
+          <li><a href="index.html">Trang chủ</a></li>
+          <li><a href="product.html">Sản phẩm</a></li>
+          <li><a href="admin.html">Admin</a></li>
+          <li><a href="#">Liên hệ</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-contact">
+        <h4>Liên hệ</h4>
+        <p>📞 0123 456 789</p>
+        <p>📧 contact@store.com</p>
+        <p>🏠 123 Đường ABC, Hà Nội</p>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <p>© 2025 Laptop & Phone Store. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <!-- Modal thêm/sửa sản phẩm -->
+  <div id="product-modal" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 id="modal-title">Thêm sản phẩm mới</h3>
+        <button class="close" onclick="closeModal()">&times;</button>
+      </div>
+      
+      <form id="product-form">
+        <div class="form-group">
+          <label for="product-name">Tên sản phẩm *</label>
+          <input type="text" id="product-name" required>
+        </div>
+        
+        <div class="form-group">
+          <label for="product-price">Giá (VND) *</label>
+          <input type="number" id="product-price" required min="0">
+        </div>
+        
+        <div class="form-group">
+          <label for="product-category">Danh mục *</label>
+          <select id="product-category" required>
+            <option value="">Chọn danh mục</option>
+            <option value="laptop">Laptop</option>
+            <option value="điện thoại">Điện thoại</option>
+          </select>
+        </div>
+        
+        <div class="form-group">
+          <label for="product-image">URL hình ảnh *</label>
+          <input type="url" id="product-image" required>
+        </div>
+        
+        <div class="form-group">
+          <label for="product-description">Mô tả</label>
+          <textarea id="product-description" rows="3"></textarea>
+        </div>
+        
+        <div class="form-group">
+          <label style="display: flex; align-items: center; gap: 8px; font-weight: 600; color: var(--text-dark);">
+            <input type="checkbox" id="product-hot" style="width: 16px; height: 16px;">
+            Sản phẩm nổi bật
+          </label>
+        </div>
+        
+        <div class="form-actions">
+          <button type="button" class="btn-cancel" onclick="closeModal()">Hủy</button>
+          <button type="submit" class="btn-save">Lưu</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <style>
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .admin-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: rgba(255,255,255,0.95);
+            border-radius: 20px;
+            box-shadow: var(--shadow-lg);
+            padding: 30px;
+            backdrop-filter: blur(10px);
+        }
+        
+        .admin-header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 20px;
+            background: var(--gradient-primary);
+            color: white;
+            border-radius: 15px;
+        }
+        
+        .admin-header h1 {
+            font-size: 28px;
+            margin-bottom: 10px;
+        }
+        
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: 600;
+            margin-bottom: 20px;
+            padding: 10px 15px;
+            background: rgba(37, 99, 235, 0.1);
+            border-radius: 25px;
+            transition: all 0.3s ease;
+        }
+        
+        .back-link:hover {
+            background: rgba(37, 99, 235, 0.2);
+            transform: translateY(-2px);
+        }
+        
+        .admin-actions {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-bottom: 30px;
+        }
+        
+        .btn-admin {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .btn-add {
+            background: var(--gradient-primary);
+            color: white;
+        }
+        
+        .btn-refresh {
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: white;
+        }
+        
+        .btn-admin:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+        
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+            margin-top: 30px;
+        }
+        
+        /* Override products-section for admin page */
+        .products-section {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 40px;
+            background: rgba(255,255,255,0.95);
+            border-radius: 20px;
+            box-shadow: var(--shadow-lg);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.2);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .product-card {
+            background: white;
+            border-radius: 12px;
+            box-shadow: var(--shadow-md);
+            overflow: hidden;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+        
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-lg);
+        }
+        
+        .product-image {
+            width: 100%;
+            height: 200px;
+            object-fit: contain;
+            background: #f8fafc;
+        }
+        
+        .product-info {
+            padding: 20px;
+        }
+        
+        .product-name {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: var(--text-dark);
+        }
+        
+        .product-price {
+            color: var(--primary-color);
+            font-weight: 700;
+            font-size: 20px;
+            margin-bottom: 15px;
+        }
+        
+        .product-category {
+            color: var(--text-light);
+            font-size: 14px;
+            margin-bottom: 15px;
+        }
+        
+        .product-actions {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+        }
+        
+        .btn-edit {
+            background: #f59e0b;
+            color: white;
+            padding: 8px 16px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+        }
+        
+        .btn-delete {
+            background: #ef4444;
+            color: white;
+            padding: 8px 16px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+        }
+        
+        .btn-edit:hover,
+        .btn-delete:hover {
+            transform: scale(1.05);
+        }
+        
+        .hot-badge {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background: linear-gradient(135deg, #ef4444, #f59e0b);
+            color: white;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 700;
+        }
+        
+        .empty-state {
+            text-align: center;
+            color: var(--text-light);
+            padding: 40px;
+            grid-column: 1 / -1;
+        }
+        
+        /* Modal styles */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .modal-content {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            max-width: 500px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+        
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid var(--border-color);
+        }
+        
+        .close {
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: var(--text-light);
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--text-dark);
+        }
+        
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            font-size: 14px;
+            transition: border-color 0.3s ease;
+        }
+        
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--primary-color);
+        }
+        
+        .form-actions {
+            display: flex;
+            gap: 15px;
+            justify-content: flex-end;
+            margin-top: 30px;
+        }
+        
+        .btn-save {
+            background: var(--gradient-primary);
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+        
+        .btn-cancel {
+            background: #6b7280;
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+    <div class="admin-container">
+        <a href="index.html" class="back-link">
+            ← Về trang chủ
+        </a>
+        
+        <div class="admin-header">
+            <h1>🔧 Quản lý sản phẩm</h1>
+            <p>Thêm, sửa, xóa sản phẩm</p>
+        </div>
+        
+        <div class="admin-actions">
+            <button class="btn-admin btn-add" onclick="openAddModal()">
+                ➕ Thêm sản phẩm mới
+            </button>
+            <button class="btn-admin btn-refresh" onclick="loadProducts()">
+                🔄 Làm mới danh sách
+            </button>
+        </div>
+        
+        <div class="products-grid" id="products-grid">
+            <!-- Products will be loaded here -->
+        </div>
+    </div>
+
+    <!-- Modal thêm/sửa sản phẩm -->
+    <div id="product-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="modal-title">Thêm sản phẩm mới</h3>
+                <button class="close" onclick="closeModal()">&times;</button>
+            </div>
+            
+            <form id="product-form">
+                <div class="form-group">
+                    <label for="product-name">Tên sản phẩm *</label>
+                    <input type="text" id="product-name" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="product-price">Giá (VND) *</label>
+                    <input type="number" id="product-price" required min="0">
+                </div>
+                
+                <div class="form-group">
+                    <label for="product-category">Danh mục *</label>
+                    <select id="product-category" required>
+                        <option value="">Chọn danh mục</option>
+                        <option value="laptop">Laptop</option>
+                        <option value="điện thoại">Điện thoại</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="product-image">URL hình ảnh *</label>
+                    <input type="url" id="product-image" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="product-description">Mô tả</label>
+                    <textarea id="product-description" rows="3"></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label style="display: flex; align-items: center; gap: 8px; font-weight: 600; color: var(--text-dark);">
+                        <input type="checkbox" id="product-hot" style="width: 16px; height: 16px;">
+                        Sản phẩm nổi bật
+                    </label>
+                </div>
+                
+                <div class="form-actions">
+                    <button type="button" class="btn-cancel" onclick="closeModal()">Hủy</button>
+                    <button type="submit" class="btn-save">Lưu</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        let allProducts = [];
+        let editingProductId = null;
+
+        // Load products from JSON Server
+        async function loadProducts() {
+            try {
+                const response = await fetch('http://localhost:3000/products');
+                if (!response.ok) throw new Error('Không thể tải dữ liệu');
+                
+                allProducts = await response.json();
+                renderProducts();
+            } catch (error) {
+                console.error('Lỗi tải sản phẩm:', error);
+                showNotification('Không thể tải danh sách sản phẩm', 'error');
+            }
+        }
+
+        // Render products
+        function renderProducts() {
+            const grid = document.getElementById('products-grid');
+            if (!allProducts || allProducts.length === 0) {
+                grid.innerHTML = '<div class="empty-state">Chưa có sản phẩm nào</div>';
+                return;
+            }
+            
+            grid.innerHTML = allProducts.map(product => `
+                <div class="product-card">
+                    ${product.hot ? '<div class="hot-badge">HOT</div>' : ''}
+                    <img src="${product.image}" alt="${product.name}" class="product-image">
+                    <div class="product-info">
+                        <div class="product-name">${product.name}</div>
+                        <div class="product-price">${Number(product.price).toLocaleString()} VND</div>
+                        <div class="product-category">${product.category}</div>
+                        <div class="product-actions">
+                            <button class="btn-edit" onclick="editProduct(${product.id})">
+                                ✏️ Sửa
+                            </button>
+                            <button class="btn-delete" onclick="deleteProduct(${product.id})">
+                                🗑️ Xóa
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Open add modal
+        function openAddModal() {
+            editingProductId = null;
+            document.getElementById('modal-title').textContent = 'Thêm sản phẩm mới';
+            document.getElementById('product-form').reset();
+            document.getElementById('product-modal').style.display = 'flex';
+        }
+
+        // Edit product
+        function editProduct(productId) {
+            const product = allProducts.find(p => p.id === productId);
+            if (!product) {
+                showNotification('Không tìm thấy sản phẩm', 'error');
+                return;
+            }
+            
+            editingProductId = productId;
+            document.getElementById('modal-title').textContent = 'Sửa sản phẩm';
+            
+            // Fill form with product data
+            document.getElementById('product-name').value = product.name;
+            document.getElementById('product-price').value = product.price;
+            document.getElementById('product-category').value = product.category;
+            document.getElementById('product-image').value = product.image;
+            document.getElementById('product-description').value = product.description || '';
+            document.getElementById('product-hot').checked = product.hot || false;
+            
+            document.getElementById('product-modal').style.display = 'flex';
+        }
+
+        // Delete product
+        async function deleteProduct(productId) {
+            if (!confirm('Bạn có chắc chắn muốn xóa sản phẩm này?')) {
+                return;
+            }
+            
+            try {
+                const response = await fetch(`http://localhost:3000/products/${productId}`, {
+                    method: 'DELETE'
+                });
+                
+                if (!response.ok) {
+                    throw new Error('Không thể xóa sản phẩm');
+                }
+                
+                await loadProducts();
+                showNotification('Xóa sản phẩm thành công!', 'success');
+            } catch (error) {
+                console.error('Lỗi xóa sản phẩm:', error);
+                showNotification('Không thể xóa sản phẩm', 'error');
+            }
+        }
+
+        // Close modal
+        function closeModal() {
+            document.getElementById('product-modal').style.display = 'none';
+            document.getElementById('product-form').reset();
+            editingProductId = null;
+        }
+
+        // Handle form submission
+        document.getElementById('product-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const formData = {
+                name: document.getElementById('product-name').value.trim(),
+                price: Number(document.getElementById('product-price').value),
+                category: document.getElementById('product-category').value,
+                image: document.getElementById('product-image').value.trim(),
+                description: document.getElementById('product-description').value.trim(),
+                hot: document.getElementById('product-hot').checked
+            };
+            
+            // Validation
+            if (!formData.name || !formData.price || !formData.category || !formData.image) {
+                showNotification('Vui lòng điền đầy đủ thông tin bắt buộc', 'error');
+                return;
+            }
+            
+            if (formData.price <= 0) {
+                showNotification('Giá sản phẩm phải lớn hơn 0', 'error');
+                return;
+            }
+            
+            try {
+                if (editingProductId) {
+                    // Update product
+                    const response = await fetch(`http://localhost:3000/products/${editingProductId}`, {
+                        method: 'PUT',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(formData)
+                    });
+                    
+                    if (!response.ok) {
+                        throw new Error('Không thể cập nhật sản phẩm');
+                    }
+                    
+                    showNotification('Cập nhật sản phẩm thành công!', 'success');
+                } else {
+                    // Add new product
+                    const newId = Math.max(...allProducts.map(p => p.id), 0) + 1;
+                    const newProduct = {
+                        id: newId,
+                        ...formData,
+                        rating: 0
+                    };
+                    
+                    const response = await fetch('http://localhost:3000/products', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(newProduct)
+                    });
+                    
+                    if (!response.ok) {
+                        throw new Error('Không thể thêm sản phẩm');
+                    }
+                    
+                    showNotification('Thêm sản phẩm thành công!', 'success');
+                }
+                
+                closeModal();
+                await loadProducts();
+            } catch (error) {
+                console.error('Lỗi lưu sản phẩm:', error);
+                showNotification('Không thể lưu sản phẩm', 'error');
+            }
+        });
+
+        // Show notification
+        function showNotification(message, type = 'info') {
+            const notification = document.createElement('div');
+            notification.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                padding: 15px 20px;
+                border-radius: 8px;
+                color: white;
+                font-weight: 600;
+                z-index: 1001;
+                box-shadow: var(--shadow-lg);
+                background: ${type === 'success' ? 'linear-gradient(135deg, #10b981, #059669)' : 
+                            type === 'error' ? 'linear-gradient(135deg, #ef4444, #dc2626)' : 
+                            'linear-gradient(135deg, #3b82f6, #1d4ed8)'};
+            `;
+            notification.textContent = message;
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.remove();
+            }, 3000);
+        }
+
+        // Close modal on outside click
+        document.getElementById('product-modal').addEventListener('click', (e) => {
+            if (e.target.id === 'product-modal') {
+                closeModal();
+            }
+        });
+
+        // Load products on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            loadProducts();
+        });
+    </script>
+</body>
+</html>

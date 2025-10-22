@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Giỏ hàng</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <!-- Header sẽ được inject bởi main.js nếu trang chưa có -->
+
+  <main class="container">
+    <h1>Giỏ hàng của bạn</h1>
+    <section id="cart-page">
+      <div id="cart-items" class="cart-list"></div>
+      <div class="cart-summary-box">
+        <p>Tổng số lượng: <strong id="cart-total-qty">0</strong></p>
+        <p>Tổng tiền: <strong id="cart-total-price">0 VND</strong></p>
+        <div class="cart-actions">
+          <button id="cart-clear" class="btn danger">Xoá tất cả</button>
+          <a href="#" class="btn primary" id="cart-checkout">Thanh toán</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer sẽ được inject bởi main.js nếu trang chưa có -->
+
+  <script src="main.js"></script>
+  <script>
+    // Khi vào trang cart.html, render lại giỏ hàng ngay
+    document.addEventListener('DOMContentLoaded', function() {
+      if (typeof renderCart === 'function') {
+        renderCart();
+      }
+    });
+  </script>
+</body>
+<!-- Gợi ý style tối thiểu, bạn có thể mở rộng trong style.css -->
+</html>
+
+

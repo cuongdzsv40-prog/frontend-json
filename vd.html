@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        let globalVar = "toi la bien toan cuc";
+        console.log(globalVar);
+        function testFunction(){
+            console.log(globalVar);
+        }
+        function myFunction(){
+            var functionVar ="toi la bien trong ham";
+            let functionLet ="toi cung la bien trong ham";
+            console.log(functionVar);
+            console.log(functionLet);
+        }
+        myFunction();
+        // console.log(functionVar);
+        // console.log(functionLet);
+        //3 block scope : pham vi ben trong dau ngoac nhon, 
+        // khai bao ban let hoac const, con var thi khong su dung duoc
+        if (true) {
+            let blockLet="toi la bien let trong khoi";
+            const blockConst ="toi la bien const trong khoi";
+            var blockVar="toi la bien var trong khoi";
+            console.log(blockConst);
+            console.log(blockLet);
+            console.log(blockVar);
+        }
+        // console.log(blockConst);
+        // console.log(blockLet);
+        console.log(blockVar);
+        //4 gia tri nguyen thuy laf kieu du lieu co ban cua javascrip duoc
+        // luu tru truc tiep trong bo nho va duoc truy cap truc tiep bang gia tri
+        //gom: string , number, null, undefned, ....
+    let a ="10";
+    let b = a;
+    a = 5;
+    console.log(a);
+    console.log(b);
+    //5 gia tri tham chieu: la cac doi tuong phuc tap lu tru theo dia chi khi truy 
+    // cap mot gia tri thm chieu thif truy cap den dia chi 
+    //gom: object, array, function
+    const array1 =[1, 2, 3, 4, 5];
+    const array2 = array1;
+    array1[2] = 10;
+    console.log(array1);
+    console.log(array2);
+    
+    const obj1={name:"ti",age:10}; 
+    const obj2=obj1;
+    obj1.name="teo";
+    console.log(obj1);
+    console.log(obj2);
+    //6 truyen tham so trong ham
+    function updateValue(val) {
+        val=val+10;
+    }
+    let x=5;
+    updateValue(x);
+    console.log(x);
+
+    function updateObject(obj) {
+        obj.value = obj.value+10;
+    }
+    let y = {value:5};
+    updateObject(y);
+    console.log(y);
+    </script>
+</body>
+</html>

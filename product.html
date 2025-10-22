@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Trang sản phẩm - Laptop & Phone Store</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="icon" href="img/iphone.jpg">
+  <meta name="description" content="Danh sách sản phẩm điện thoại và laptop chính hãng, giá tốt.">
+</head>
+<body>
+
+  <!-- Thanh điều hướng -->
+  <header class="navbar">
+    <a href="index.html" class="logo">📱 Laptop & Phone Store</a>
+
+    <!-- Thanh tìm kiếm -->
+    <div class="search-box">
+      <input id="search-input" type="text" placeholder="Tìm sản phẩm...">
+      <button id="search-button">Tìm</button>
+    </div>
+
+    <!-- Đăng nhập / Đăng ký + Giỏ hàng -->
+    <div class="auth">
+      <a href="index.html" class="btn">Trang chủ</a>
+      <a href="admin.html" class="btn" style="background: var(--gradient-primary); color: white;">🔧 Admin</a>
+      <a href="product.html" class="btn">Sản phẩm</a>
+      <a href="../lab8/login.html" class="btn">Đăng nhập</a>
+      <a href="../lab8/register.html" class="btn">Đăng ký</a>
+      <a href="#" class="cart-btn" id="cart-button" aria-label="Giỏ hàng">
+        🛒 <span>Giỏ hàng</span>
+        <span class="cart-count" id="cart-count">0</span>
+      </a>
+    </div>
+  </header>
+
+  <!-- Tiêu đề trang -->
+  <h1 class="tc">Tất cả sản phẩm</h1>
+
+  <!-- Khu vực sản phẩm -->
+  <div class="products-section">
+    <div class="sort-controls" style="display:flex;justify-content:flex-end;gap:10px;margin-bottom:10px;align-items:center;">
+      <label for="sort-select" style="font-weight:600;color:#334155;">Sắp xếp:</label>
+      <select id="sort-select" style="padding:8px 12px;border-radius:8px;border:1px solid #e2e8f0;">
+        <option value="">Mặc định</option>
+        <option value="price-asc">Giá tăng dần</option>
+        <option value="price-desc">Giá giảm dần</option>
+      </select>
+    </div>
+
+    <h2 class="section">Sản phẩm nổi bật</h2>
+    <div id="product-hot"></div>
+
+    <h2 class="section">Laptop</h2>
+    <div id="product-laptop"></div>
+
+    <h2 class="section">Điện thoại</h2>
+    <div id="product-dienthoai"></div>
+
+  </div>
+
+  <!-- Footer -->
+  <footer>
+    <div class="footer-container">
+      <div class="footer-about">
+        <h3>📱 Laptop & Phone Store</h3>
+        <p>Cửa hàng chuyên cung cấp điện thoại và laptop chính hãng, giá tốt.</p>
+      </div>
+
+      <div class="footer-links">
+        <h4>Liên kết nhanh</h4>
+        <ul>
+          <li><a href="index.html">Trang chủ</a></li>
+          <li><a href="index1.html">Sản phẩm</a></li>
+          <li><a href="#">Giỏ hàng</a></li>
+          <li><a href="#">Liên hệ</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-contact">
+        <h4>Liên hệ</h4>
+        <p>📞 0123 456 789</p>
+        <p>📧 contact@store.com</p>
+        <p>🏠 123 Đường ABC, Hà Nội</p>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <p>© 2025 Laptop & Phone Store. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="main.js"></script>
+</body>
+</html>
+

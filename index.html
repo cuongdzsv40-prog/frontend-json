@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cửa hàng điện thoại & laptop</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Thanh điều hướng -->
+  <header class="navbar">
+    <a href="index.html" class="logo">📱 Laptop & Phone Store</a>
+    
+    <!-- Thanh tìm kiếm -->
+    <div class="search-box">
+      <input id="search-input" type="text" placeholder="Tìm sản phẩm...">
+      <button id="search-button">Tìm</button>
+    </div>
+
+    <!-- Đăng nhập / Đăng ký + Giỏ hàng -->
+    <div class="auth" id="auth-section">
+      <a href="index.html" class="btn">Trang chủ</a>
+      <a href="admin.html" class="btn" style="background: var(--gradient-primary); color: white;">🔧 Admin</a>
+      <a href="product.html" class="btn">Sản phẩm</a>
+      <a href="../lab8/login.html" class="btn">Đăng nhập</a>
+      <a href="../lab8/register.html" class="btn">Đăng ký</a>
+      <a href="#" class="cart-btn" id="cart-button" aria-label="Giỏ hàng">
+        🛒 <span>Giỏ hàng</span>
+        <span class="cart-count" id="cart-count">0</span>
+      </a>
+    </div>
+  </header>
+
+  <!-- Banner -->
+  <div class="banner">
+    <img src="img/galaxy.jpg" alt="Banner quảng cáo">
+  </div>
+
+  <!-- Trang chủ -->
+  <h1 class="tc">Trang chủ cửa hàng</h1>
+
+
+  <!-- Toàn bộ sản phẩm -->
+  <div class="products-section">
+
+    <h2 class="section">Sản phẩm nổi bật</h2>
+    <div id="product-hot"></div>
+    
+    <h2 class="section">Laptop</h2>
+    <div id="product-laptop"></div>
+    
+    <h2 class="section">Điện thoại</h2>
+    <div id="product-dienthoai"></div>
+
+  </div>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-container">
+      <div class="footer-about">
+        <h3>📱 Laptop & Phone Store</h3>
+        <p>Cửa hàng chuyên cung cấp điện thoại và laptop chính hãng, giá tốt.</p>
+      </div>
+
+      <div class="footer-links">
+        <h4>Liên kết nhanh</h4>
+        <ul>
+          <li><a href="index.html">Trang chủ</a></li>
+          <li><a href="index1.html">Sản phẩm</a></li>
+          <li><a href="#">Giỏ hàng</a></li>
+          <li><a href="#">Liên hệ</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-contact">
+        <h4>Liên hệ</h4>
+        <p>📞 0123 456 789</p>
+        <p>📧 contact@store.com</p>
+        <p>🏠 123 Đường ABC, Hà Nội</p>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <p>© 2025 Laptop & Phone Store. All rights reserved.</p>
+    </div>
+  </footer>
+
+
+  <!-- Firebase SDK -->
+  <script type="module">
+    import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
+    import { getAuth, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
+    
+    // Firebase config (thay bằng config thực tế của bạn)
+    const firebaseConfig = {
+      apiKey: "your-api-key",
+      authDomain: "your-project.firebaseapp.com",
+      projectId: "your-project-id",
+      storageBucket: "your-project.appspot.com",
+      messagingSenderId: "123456789",
+      appId: "your-app-id"
+    };
+    
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    
+    // Check authentication state
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        // User is signed in
+        const userInfo = JSON.parse(localStorage.getItem('currentUser') || '{}');
+        updateAuthNavigation();
+      } else {
+        // User is signed out
+        updateAuthNavigation();
+      }
+    });
+    
+    // Make auth available globally
+    window.auth = auth;
+  </script>
+
+  <!-- Nhúng file js -->
+  <script src="admin-users.js"></script>
+  <script src="main.js"></script>
+</body>
+</html>
